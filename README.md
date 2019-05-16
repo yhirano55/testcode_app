@@ -1,24 +1,31 @@
-# README
+# testcode app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Setup
 
-Things you may want to cover:
+```
+$ bundle install
+$ bundle exec rails db:create db:migrate
+```
 
-* Ruby version
+## API
 
-* System dependencies
+```
+$ curl -X localhost:3000/api/v1/auth --data 'email=admin@example.com' --data 'password=password'
+```
 
-* Configuration
+### 仕様
 
-* Database creation
+#### 概要
 
-* Database initialization
+リクエストパラメーター email と password を受け付け、emailからユーザーを検索し、ユーザーが存在したらパスワードで認証する
 
-* How to run the test suite
+1. 認証に成功したら、JSON形式でアクセストークンを返す（HTTPステータスコード 200）
+2. 認証に失敗したら、JSON形式でエラーメッセージを返す（HTTPステータスコード 401）
+2. ユーザーを検索して存在しなければ、JSON形式でエラーメッセージを返す（HTTP ステータスコード 404）
+3. ユーザーを検索して存在するもBANされている場合は、JSON形式でエラーメッセージを返す（HTTP ステータスコード 403）
 
-* Services (job queues, cache servers, search engines, etc.)
+### Userデータの作り方
 
-* Deployment instructions
-
-* ...
+```
+$ bundle exec rails runner 'User.create(email: "admin@example.com", password: "password")'
+```
